@@ -1,7 +1,7 @@
 - name: add sudoers no pass group
   template:
-    src: sudoers-no-pass.j2
-    dest: /etc/sudoers
+    src: sudo-no-pass.j2
+    dest: /etc/sudoers.d/sudo-no-pass
     owner: root
     group: root
     mode: '0400'
