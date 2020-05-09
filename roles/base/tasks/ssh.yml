@@ -1,0 +1,45 @@
+- name: add sudoers no pass group
+  template:
+    src: sudoers-no-pass.j2
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: '0400'
+
+- name: Create users
+  user:
+    name: "{{ item.key }}"
+    groups: admin
+    shell: /bin/bash
+  with_dict: "{{ users }}"
+
+- name: Create SSH folder
+  file:
+    path: "~{{ item.key }}/.ssh"
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    mode: "0755"
+    state: directory
+  with_dict: "{{ users }}"
+
+- name: Upload SSH keys
+  template:
+    src: authorized_keys.j2
+    dest: "~{{ item.key }}/.ssh/authorized_keys"
+    owner: "{{ item.key }}"
+    group: "{{ item.key }}"
+    mode: "0644"
+  vars:
+    public_keys: "{{ item.value.public_keys }}"
+  with_dict: "{{ users }}"
+
+- name: Upload SSH config
+  template:
+    src: sshd_config.j2
+    dest: "/etc/ssh/sshd_config"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  vars:
+    users_list: "{{ users.keys() | list }}"
+  notify: restart ssh

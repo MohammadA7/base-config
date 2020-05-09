@@ -1,0 +1,7 @@
+- name: apt.yml
+  include: apt.yml
+  tags: apt
+
+- name: ssh.yml
+  include: ssh.yml
+  tags: ssh

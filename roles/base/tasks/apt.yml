@@ -1,0 +1,10 @@
+- name: Install required packages
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+  loop:
+    - aptitude
+    - python3-pip
+    - python3-setuptools
