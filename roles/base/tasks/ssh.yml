@@ -9,7 +9,8 @@
 - name: Create users
   user:
     name: "{{ item.key }}"
-    groups: admin
+    groups:
+      - admin
     shell: /bin/bash
   with_dict: "{{ users }}"
 
